@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Baris & Deret Aritmetika</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #0b0b10;
+            /* Hitam kebiruan gelap ala garasi mobil sport */
+            color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+        }
+
+        h1 {
+            color: #b19cd9;
+            /* Ungu muda terang */
+            text-align: center;
+        }
+
+        h3 {
+            color: #b19cd9;
+            /* Ungu muda terang */
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #e2d9fc;
+        }
+
+        select,
+        input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #9932CC;
+            border-radius: 4px;
+            background-color: #1a1128;
+            /* Gelap bernuansa ungu */
+            color: white;
+        }
+
+        button {
+            background-color: #8A2BE2;
+            /* Ungu neon sport (Blue Violet) */
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.6);
+            /* Efek nyala */
+        }
+
+        button:hover {
+            background-color: #9932CC;
+            box-shadow: 0 0 15px rgba(153, 50, 204, 0.9);
+        }
+
+        .section-form {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: #2c0c3e;
+            /* Warna ungu mobil sport yang menyala/deep purple */
+            border: 2px solid #8A2BE2;
+            /* Garis pinggir ungu neon */
+            border-radius: 8px;
+            color: white;
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.4);
+        }
+
+        .section-form h3,
+        .section-form label {
+            color: #ffffff;
+        }
+
+        .active {
+            display: block;
+        }
+
+        #hasil-container {
+            margin-top: 25px;
+            padding: 15px;
+            background: #14101e;
+            border: 1px solid #4a154b;
+            border-radius: 6px;
+            color: #fff;
+        }
+
+        .coretan {
+            background: #1a1325 !important;
+            color: #00ffcc !important;
+            border-left: 4px solid #8A2BE2 !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Kalkulator Baris & Deret Aritmetika</h1>
+
+    <!-- Pilihan Menu Kondisi Awal -->
+    <div class="form-group">
+        <label for="pilihMenu">Pilih Kondisi Awal:</label>
+        <select id="pilihMenu" onchange="gantiMenu()">
+            <option value="">-- Pilih Menu --</option>
+            <option value="1">1. Suku Pertama (a) dan Beda (b) Diketahui</option>
+            <option value="2">2. Belum Diketahui (Gunakan 2 Suku & Eliminasi)</option>
+        </select>
+    </div>
+
+    <!-- FORM MENU 1 -->
+    <div id="formMenu1" class="section-form">
+        <h3>Diketahui Suku Pertama (a) dan Beda (b)</h3>
+        <div class="form-group">
+            <label>Masukkan Suku Pertama (a):</label>
+            <input type="number" id="m1_a" step="any">
+        </div>
+        <div class="form-group">
+            <label>Masukkan Beda / Selisih (b):</label>
+            <input type="number" id="m1_b" step="any">
+        </div>
+        <div class="form-group">
+            <label>Cari Suku ke-n (Masukkan nilai n):</label>
+            <input type="number" id="m1_nr">
+        </div>
+        <div class="form-group">
+            <label>Jumlah n Suku Pertama (Masukkan nilai n untuk Sn):</label>
+            <input type="number" id="m1_ns">
+        </div>
+        <button type="button" onclick="hitungMenu1()">Hitung</button>
+    </div>
+
+    <!-- FORM MENU 2 -->
+    <div id="formMenu2" class="section-form">
+        <h3>Metode Eliminasi (2 Suku Diketahui)</h3>
+        <div class="form-group">
+            <label>Suku ke- (n1):</label>
+            <input type="number" id="m2_n1">
+        </div>
+        <div class="form-group">
+            <label>Nilai U<sub>n1</sub>:</label>
+            <input type="number" id="m2_u1" step="any">
+        </div>
+        <div class="form-group">
+            <label>Suku ke- (n2):</label>
+            <input type="number" id="m2_n2">
+        </div>
+        <div class="form-group">
+            <label>Nilai U<sub>n2</sub>:</label>
+            <input type="number" id="m2_u2" step="any">
+        </div>
+        <div class="form-group">
+            <label>Cari Suku ke-n (Masukkan nilai n):</label>
+            <input type="number" id="m2_nun">
+        </div>
+        <div class="form-group">
+            <label>Jumlah n Suku Pertama (Masukkan nilai n untuk Sn):</label>
+            <input type="number" id="m2_nsn">
+        </div>
+        <button type="button" onclick="hitungMenu2()">Hitung dengan Eliminasi</button>
+    </div>
+
+    <!-- AREA OUTPUT HASIL -->
+    <div id="hasil-container">
+        <h3>Hasil Perhitungan:</h3>
+        <div id="outputHasil">Silakan pilih menu dan masukkan data di atas.</div>
+    </div>
+
+    <!-- SCRIPT JAVASCRIPT LOGIKA & DOM -->
+    <script>
+        // Fungsi untuk mengatur tampilan form berdasarkan pilihan dropdown
+        function gantiMenu() {
+            var pilihan = document.getElementById("pilihMenu").value;
+            var form1 = document.getElementById("formMenu1");
+            var form2 = document.getElementById("formMenu2");
+
+            form1.classList.remove("active");
+            form2.classList.remove("active");
+
+            if (pilihan === "1") {
+                form1.classList.add("active");
+            } else if (pilihan === "2") {
+                form2.classList.add("active");
+            }
+        }
+
+        // Logika Perhitungan Menu 1 (Lengkap dengan Langkah U_n & S_n)
+        function hitungMenu1() {
+            var a = parseFloat(document.getElementById("m1_a").value);
+            var b = parseFloat(document.getElementById("m1_b").value);
+            var nr = parseInt(document.getElementById("m1_nr").value);
+            var ns = parseInt(document.getElementById("m1_ns").value);
+
+            if (!isNaN(a) && !isNaN(b) && !isNaN(nr) && !isNaN(ns)) {
+                var r = a + (nr - 1) * b;
+                var s = (ns / 2) * (2 * a + (ns - 1) * b);
+
+                var htmlHasil = `
+                    <div class="coretan" style="background: #fff; padding: 10px; border-left: 4px solid #007BFF; margin-bottom: 15px; font-family: monospace; font-size: 14px;">
+                        <b>--- Langkah Perhitungan (Coretan) ---</b><br><br>
+                        <b>1. Menghitung Suku ke-${nr} (U<sub>${nr}</sub>):</b><br>
+                        Rumus: U<sub>n</sub> = a + (n - 1)b<br>
+                        U<sub>${nr}</sub> = ${a} + (${nr} - 1) × ${b}<br>
+                        U<sub>${nr}</sub> = ${a} + ${nr - 1} × ${b}<br>
+                        <b>U<sub>${nr}</sub> = ${r}</b><br><br>
+                        <b>2. Menghitung Jumlah ${ns} Suku Pertama (S<sub>${ns}</sub>):</b><br>
+                        Rumus: S<sub>n</sub> = (n / 2) × [2a + (n - 1)b]<br>
+                        S<sub>${ns}</sub> = (${ns} / 2) × [2(${a}) + (${ns} - 1) × ${b}]<br>
+                        S<sub>${ns}</sub> = (${ns} / 2) × [${2 * a} + (${ns - 1} × ${b})]<br>
+                        <b>S<sub>${ns}</sub> = ${s}</b>
+                    </div>
+                    <h2>Hasil Akhir:</h2>
+                    <p>Diketahui: a = ${a}, b = ${b}</p>
+                    <p><b>Suku ke-${nr} (U<sub>${nr}</sub>)</b> = ${r}</p>
+                    <p><b>Jumlah ${ns} suku pertama (S<sub>${ns}</sub>)</b> = ${s}</p>
+                `;
+                document.getElementById("outputHasil").innerHTML = htmlHasil;
+            } else {
+                alert("Harap isi semua kolom dengan angka yang valid!");
+            }
+        }
+
+        // Logika Perhitungan Menu 2 (Eliminasi, Substitusi, hingga U_n & S_n)
+        function hitungMenu2() {
+            var n1 = parseInt(document.getElementById("m2_n1").value);
+            var u1 = parseFloat(document.getElementById("m2_u1").value);
+            var n2 = parseInt(document.getElementById("m2_n2").value);
+            var u2 = parseFloat(document.getElementById("m2_u2").value);
+            var n_un = parseInt(document.getElementById("m2_nun").value);
+            var n_sn = parseInt(document.getElementById("m2_nsn").value);
+
+            if (!isNaN(n1) && !isNaN(u1) && !isNaN(n2) && !isNaN(u2) && !isNaN(n_un) && !isNaN(n_sn)) {
+                // Memastikan n1 > n2 agar pengurangannya valid
+                if (n1 < n2) {
+                    var temp_n = n1; n1 = n2; n2 = temp_n;
+                    var temp_u = u1; u1 = u2; u2 = temp_u;
+                }
+
+                // Proses Eliminasi untuk mencari b & a
+                var selisih_n = n1 - n2;
+                var selisih_u = u1 - u2;
+                var b = selisih_u / selisih_n;
+                var a = u1 - (n1 - 1) * b;
+
+                var r = a + (n_un - 1) * b;
+                var s = (n_sn / 2) * (2 * a + (n_sn - 1) * b);
+
+                var htmlHasil = `
+                    <div class="coretan" style="background: #fff; padding: 10px; border-left: 4px solid #007BFF; margin-bottom: 15px; font-family: monospace; font-size: 14px;">
+                        <b>--- 1. Proses Eliminasi (Mencari b) ---</b><br>
+                        U<sub>${n1}</sub> = ${u1}<br>
+                        U<sub>${n2}</sub> = ${u2}<br>
+                        ------------------------- (-)<br>
+                        (${n1} - ${n2})b = ${u1} - ${u2}<br>
+                        ${selisih_n}b = ${selisih_u}<br>
+                        <b>b = ${b}</b><br><br>
+                        <b>--- 2. Proses Substitusi (Mencari a) ---</b><br>
+                        a = U<sub>${n1}</sub> - (${n1} - 1) × b<br>
+                        a = ${u1} - (${n1 - 1}) × ${b}<br>
+                        <b>a = ${a}</b><br><br>
+                        <b>--- 3. Menghitung Suku ke-${n_un} (U<sub>${n_un}</sub>) ---</b><br>
+                        U<sub>${n_un}</sub> = a + (${n_un} - 1)b<br>
+                        U<sub>${n_un}</sub> = ${a} + (${n_un} - 1) × ${b}<br>
+                        <b>U<sub>${n_un}</sub> = ${r}</b><br><br>
+                        <b>--- 4. Menghitung Jumlah ${n_sn} Suku (S<sub>${n_sn}</sub>) ---</b><br>
+                        S<sub>${n_sn}</sub> = (${n_sn} / 2) × [2a + (${n_sn} - 1)b]<br>
+                        S<sub>${n_sn}</sub> = (${n_sn} / 2) × [2(${a}) + (${n_sn} - 1) × ${b}]<br>
+                        <b>S<sub>${n_sn}</sub> = ${s}</b>
+                    </div>
+                    <h2>Hasil Akhir:</h2>
+                    <p><b>Suku Pertama (a)</b> = ${a}</p>
+                    <p><b>Beda (b)</b> = ${b}</p>
+                    <p><b>Suku ke-${n_un} (U<sub>${n_un}</sub>)</b> = ${r}</p>
+                    <p><b>Jumlah ${n_sn} suku pertama (S<sub>${n_sn}</sub>)</b> = ${s}</p>
+                `;
+                document.getElementById("outputHasil").innerHTML = htmlHasil;
+            } else {
+                alert("Harap isi semua kolom dengan angka yang valid!");
+            }
+        }
+    </script>
+</body>
+
+</html>
